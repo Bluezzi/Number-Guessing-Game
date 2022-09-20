@@ -1,9 +1,9 @@
 //Guess the Number (GTN.js)
 
 //Variables
-var prompt = "Pick a number cap between ZERO and Infinity!";
-var guess = "How many Guesses do you want?";
-var gan = "Guess a number"
+var prompt = `Pick a number cap between ZERO and Infinity! \n`;
+var guess = `How many Guesses do you want? \n`;
+var gan = `Guess a number \n`
 var higher = "Higher";
 var lower = "Lower";
 var gameover = "GAMEOVER :(";
@@ -24,9 +24,9 @@ const question1 = () => {
     rl.question(prompt, answer => {
       console.log(`The Number cap is set to ${answer}`)
         if (isNaN(answer)) {
-          reject("Hey dummy, that's not a number!")
+          reject(new Error("Hey dummy, that's not a number!"))
         } else if (answer < 0) {
-          reject("Please use a POSITIVE Number!")
+          reject(new Error("Please use a POSITIVE Number!"))
         } else {
           resolve (answer)
         }
@@ -39,9 +39,9 @@ const question2 = () => {
     rl.question(guess, (answer2) => {
       console.log(`You have ${answer2} tries to guess the number!`)
       if (isNaN(answer2)) {
-        reject("Hey dummy, that's not a number!")
+        reject(new Error("Hey dummy, that's not a number!"))
       } else if (answer2 < 0) {
-        reject("Please use a POSITIVE Number!")
+        reject(new Error("Please use a POSITIVE Number!"))
       } else {
         resolve (answer2)
       }
@@ -53,9 +53,9 @@ const question3 = () => {
     return new Promise((resolve, reject) => {
       rl.question(gan, (answer3) => {
         if (isNaN(answer3)) {
-          reject("Hey dummy, that's not a number!")
+          reject(new Error("Hey dummy, that's not a number!"))
         } else if (answer3 < 0) {
-          reject("Please use a POSITIVE Number!")
+          reject(new Error("Please use a POSITIVE Number!"))
         } else {
           resolve (answer3)
         }
@@ -72,8 +72,6 @@ const main = async () => {
     while (y > 0){
     console.log(`You have ${y} tries remaining`)
 
-    y = y - 1
-
     z /*number they guessed*/  = await question3()
 
     if (z < rn){
@@ -81,9 +79,11 @@ const main = async () => {
       } else if (z > rn){
       console.log("The Number is Lower")
       } else {break}
+    
+    y = y - 1
   }
 
-  if (y == -1){
+  if (y <= 0){
     console.log(gameover, `The corrent number was ${rn}`)
   }
   else{
@@ -92,11 +92,6 @@ const main = async () => {
   
 }
 
-
-main().catch(error => {
-    console.log(`Program crashed because: ${error.stack}`);
-});
-
 //Number Generator
 function between(min, max) {  
   return Math.floor(
@@ -104,9 +99,33 @@ function between(min, max) {
   )
 }
 
+//Play Again
+const question4 = () => {
+  return new Promise((resolve, reject) => {
+    rl.question(`Play Again (Y or N) \n`, (answer4) => {
+      answer4 = answer4.toUpperCase()
+      if (answer4 == "Y") {
+      } else if (answer4 == "N"){
+           }else{
+              reject (new Error("Hey, that wasn't an option!!!"))
+              } resolve (answer4)
+  })
+})
+}
+
 //Loop main
 const playgame = async () => {
-  for (i=0;i<=5;i++) {
-    await main
+  keepplaying = true
+  while (keepplaying == true) {
+    await main ()
+      if (await question4() == "Y"){
+      } else {
+        keepplaying = false
+        console.log ("Thanks for Playing <3")
+      }
+  }
 }
-}
+
+playgame().catch(error => {
+    console.log(`Program crashed because: ${error.stack}`);
+});
