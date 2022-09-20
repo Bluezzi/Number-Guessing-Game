@@ -66,7 +66,7 @@ const question3 = () => {
 const main = async () => {
   let x /*number cap*/ = await question1()
   let y /*how many guesses (Take this answer and loop that many times, if they get it right exit early, if they dont get it in that number of Gueses, gameover)*/ = await question2()
-  let rn = between(0, x); /*Random number between cap and zero that is chose*/
+  let rn = between(1, x); /*Random number between cap and zero that is chose*/
   let z = 0
 
     while (y > 0){
